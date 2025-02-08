@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 
 //import routes
 const authRoutes = require("./routes/authRoutes");
+const productRoutes = require("./routes/productRoutes");
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +27,8 @@ app.get("/", (req, res) => {
 
 //use routes
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/uploads", express.static("uploads")); // Serve uploaded images
 
 // Set PORT
 const PORT = process.env.PORT || 5000;
