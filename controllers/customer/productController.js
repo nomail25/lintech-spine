@@ -41,9 +41,23 @@ exports.getProductByVendor = async (req, res) => {
     try {
         const products = await Product.find({ vendor: vendorName });
         if (products.length === 0) {
-            return res.status(404).json({ message: 'No products found in this category' });
+            return res.status(404).json({ message: 'No products found of vendor: '+vendor });
         }
         console.log("returned search on "+vendor+" : \n"+products)
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+exports.getProductByModel = async (req, res) => {
+    const { model } = req.params;
+    try {
+        const products = await Product.find({ modelNumber: model });
+        if (products.length === 0) {
+            return res.status(404).json({ message: 'No products found with model: '+model });
+        }
+        console.log("returned search on "+model+" : \n"+products)
         res.status(200).json(products);
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
