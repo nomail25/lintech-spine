@@ -15,11 +15,20 @@ app.use(cors());
 // Routes
 const adminAuthRoutes = require("./routes/admin/authRoutes");
 const sellerAuthRoutes = require("./routes/seller/authRoutes");
-const sellerProdRoutes = require("./routes/seller/productRoutes")
+const sellerProdRoutes = require("./routes/seller/productRoutes");
+const customerAuthRoutes = require("./routes/customer/authRoutes");
+const customerProdRoutes = require("./routes/customer/productRoutes");
 
+//Authentication
 app.use("/api/admin/auth", adminAuthRoutes);
 app.use("/api/seller/auth", sellerAuthRoutes);
+app.use("/api/customer", customerAuthRoutes);
+
+//Product
 app.use("/api/seller/product", sellerProdRoutes);
+app.use("/api/customer/product", customerProdRoutes);
+
+//Order
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
