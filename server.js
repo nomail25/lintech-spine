@@ -1,32 +1,41 @@
 const express = require("express");
-const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const connectDB = require("./config/db");
+const dotenv = require("dotenv");
 
-//import routes
-const authRoutes = require("./routes/authRoutes");
-
-// Load environment variables
 dotenv.config();
 
-// Connect to MongoDB
-connectDB();
-
-// Initialize Express app
 const app = express();
+const port = process.env.PORT || 5000;
 
 // Middleware
+app.use(express.json());
 app.use(cors());
-app.use(express.json()); // Parse JSON requests
 
-// Default route
-app.get("/", (req, res) => {
-    res.send("Lintech API is running...");
+// Routes
+const adminAuthRoutes = require("./routes/admin/authRoutes");
+const sellerAuthRoutes = require("./routes/seller/authRoutes");
+const sellerProdRoutes = require("./routes/seller/productRoutes");
+const customerAuthRoutes = require("./routes/customer/authRoutes");
+const customerProdRoutes = require("./routes/customer/productRoutes");
+
+//Authentication
+app.use("/api/admin/auth", adminAuthRoutes);
+app.use("/api/seller/auth", sellerAuthRoutes);
+app.use("/api/customer", customerAuthRoutes);
+
+//Product
+app.use("/api/seller/product", sellerProdRoutes);
+app.use("/api/customer/product", customerProdRoutes);
+
+//Order
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("Connected to MongoDB"))
+    .catch((err) => console.log("MongoDB connection error:", err));
+
+// Start server
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
 });
-
-//use routes
-app.use("/api/auth", authRoutes);
-
-// Set PORT
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
