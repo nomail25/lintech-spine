@@ -48,7 +48,7 @@ exports.customerSignIn = async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ success: false, message: "Invalid credentials" });
         }
-        const token = jwt.sign({ id: customer._id, role: customer.role }, process.env.CUST_SECRET, {
+        const token = jwt.sign({ id: customer._id, role: customer.role, address: customer.address }, process.env.CUST_SECRET, {
             expiresIn: "1h"
         });
 
